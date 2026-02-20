@@ -33,7 +33,7 @@ export default function Home() {
       );
       setSubmitted(true);
     } catch (error) {
-      alert("Something went wrong. Please try again.");
+      alert("Something went wrong. Please try again. ");
     } finally {
       setLoading(false);
     }
