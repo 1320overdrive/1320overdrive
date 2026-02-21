@@ -21,6 +21,7 @@ export default function Home() {
   const [loading, setLoading] = useState(false);
   const [lightbox, setLightbox] = useState<string | null>(null);
   const [menuOpen, setMenuOpen] = useState(false);
+  const [videoModalOpen, setVideoModalOpen] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -63,6 +64,34 @@ export default function Home() {
               height={800}
               className="w-full h-auto object-contain rounded-xl"
             />
+          </div>
+        </div>
+      )}
+
+      {/* Video Modal */}
+      {videoModalOpen && (
+        <div
+          className="fixed inset-0 bg-black/95 z-50 flex items-center justify-center p-4"
+          onClick={() => setVideoModalOpen(false)}
+        >
+          <button
+            className="absolute top-6 right-8 text-white text-4xl font-light hover:text-red-500 transition-colors z-10"
+            onClick={() => setVideoModalOpen(false)}
+          >
+            ✕
+          </button>
+          <div
+            className="relative w-full max-w-5xl"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <video
+              controls
+              autoPlay
+              playsInline
+              className="w-full rounded-xl"
+            >
+              <source src="/videos/gameplay1.mp4" type="video/mp4" />
+            </video>
           </div>
         </div>
       )}
@@ -125,13 +154,26 @@ export default function Home() {
           <source src="/videos/gameplay1.mp4" type="video/mp4" />
         </video>
         <div className="absolute inset-0 bg-black/65 z-10" />
-        <div className="relative z-20 flex flex-col items-center gap-4 px-4">
+        <div className="relative z-20 flex flex-col items-center gap-6 px-4">
           <p className="text-red-500 text-xs sm:text-sm font-semibold tracking-widest uppercase">
             Coming Soon
           </p>
           <p className="text-zinc-300 text-base sm:text-xl max-w-xl leading-relaxed">
             The ultimate mobile drag racing experience. Full throttle. No limits.
           </p>
+          {/* Play button */}
+          <button
+            onClick={() => setVideoModalOpen(true)}
+            className="mt-2 group flex items-center gap-3 bg-white/10 hover:bg-red-600 active:bg-red-700 border border-white/20 hover:border-red-600 backdrop-blur-sm text-white font-bold px-6 py-3 rounded-full uppercase tracking-widest text-sm transition-all duration-200 touch-manipulation"
+          >
+            <span className="flex items-center justify-center w-6 h-6 rounded-full border-2 border-white group-hover:border-white">
+              {/* Triangle play icon */}
+              <svg className="w-3 h-3 fill-white ml-0.5" viewBox="0 0 10 10">
+                <polygon points="1,0 9,5 1,10" />
+              </svg>
+            </span>
+            Watch Gameplay
+          </button>
         </div>
       </section>
 
@@ -213,7 +255,7 @@ export default function Home() {
             <form onSubmit={handleSubmit} className="flex flex-col gap-4 text-left">
               <input
                 type="text"
-                placeholder="Name"
+                placeholder="Your Name"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 required
@@ -222,14 +264,14 @@ export default function Home() {
               />
               <input
                 type="email"
-                placeholder="Email"
+                placeholder="Your Email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
                 className="text-base px-5 py-4 rounded-xl bg-zinc-800 border border-white/10 text-white placeholder-zinc-500 focus:outline-none focus:border-red-500"
               />
               <textarea
-                placeholder="Message"
+                placeholder="Your Message"
                 value={message}
                 onChange={(e) => setMessage(e.target.value)}
                 required
