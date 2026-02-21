@@ -107,6 +107,7 @@ export default function Home() {
           <div className="hidden md:flex gap-8 text-sm text-zinc-400">
             <a href="#about" className="hover:text-white transition-colors">About</a>
             <a href="#features" className="hover:text-white transition-colors">Features</a>
+            <a href="#platforms" className="hover:text-white transition-colors">Platforms</a>
             <a href="#media" className="hover:text-white transition-colors">Media</a>
             <a href="#contact" className="hover:text-white transition-colors">Contact</a>
           </div>
@@ -128,6 +129,7 @@ export default function Home() {
           <div className="md:hidden mt-4 pb-2 flex flex-col gap-4 text-sm text-zinc-400 border-t border-white/10 pt-4">
             <a href="#about" onClick={() => setMenuOpen(false)} className="hover:text-white transition-colors">About</a>
             <a href="#features" onClick={() => setMenuOpen(false)} className="hover:text-white transition-colors">Features</a>
+            <a href="#platforms" onClick={() => setMenuOpen(false)} className="hover:text-white transition-colors">Platforms</a>
             <a href="#media" onClick={() => setMenuOpen(false)} className="hover:text-white transition-colors">Media</a>
             <a href="#contact" onClick={() => setMenuOpen(false)} className="hover:text-white transition-colors">Contact</a>
           </div>
@@ -208,6 +210,36 @@ export default function Home() {
         </div>
       </section>
 
+      {/* Platforms */}
+      <section id="platforms" className="py-20 md:py-32 px-6 max-w-4xl mx-auto text-center">
+        <h2 className="text-3xl md:text-4xl font-black uppercase mb-4">Coming Soon</h2>
+        <p className="text-zinc-400 mb-12 text-base md:text-lg">Coming to your multiple platforms</p>
+        <div className="flex flex-col sm:flex-row items-center justify-center gap-8 md:gap-16">
+          {[
+            { src: "/images/ios.png", alt: "iOS" },
+            { src: "/images/android.png", alt: "Android" },
+            { src: "/images/steam.png", alt: "Steam" },
+          ].map((p) => (
+            <div
+              key={p.alt}
+              className="flex flex-col items-center gap-3 group"
+            >
+              <div className="w-20 h-20 md:w-24 md:h-24 relative flex items-center justify-center rounded-2xl border border-white/10 bg-zinc-900 p-2 group-hover:border-red-500 group-hover:bg-zinc-800 transition-all duration-200">
+                <Image
+                  src={p.src}
+                  alt={p.alt}
+                  fill
+                  className="object-contain p-2"
+                />
+              </div>
+              <span className="text-zinc-400 text-sm font-semibold uppercase tracking-widest group-hover:text-white transition-colors">
+                {p.alt}
+              </span>
+            </div>
+          ))}
+        </div>
+      </section>
+
       {/* Media */}
       <section id="media" className="py-20 md:py-32 px-6 max-w-5xl mx-auto text-center">
         <h2 className="text-3xl md:text-4xl font-black uppercase mb-12 md:mb-16">Media</h2>
@@ -255,7 +287,7 @@ export default function Home() {
             <form onSubmit={handleSubmit} className="flex flex-col gap-4 text-left">
               <input
                 type="text"
-                placeholder="Your Name"
+                placeholder="Name"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 required
@@ -264,14 +296,14 @@ export default function Home() {
               />
               <input
                 type="email"
-                placeholder="Your Email"
+                placeholder="Email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
                 className="text-base px-5 py-4 rounded-xl bg-zinc-800 border border-white/10 text-white placeholder-zinc-500 focus:outline-none focus:border-red-500"
               />
               <textarea
-                placeholder="Your Message"
+                placeholder="Message"
                 value={message}
                 onChange={(e) => setMessage(e.target.value)}
                 required
