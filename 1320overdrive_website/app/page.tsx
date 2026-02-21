@@ -22,6 +22,13 @@ export default function Home() {
   const [lightbox, setLightbox] = useState<string | null>(null);
   const [menuOpen, setMenuOpen] = useState(false);
   const [videoModalOpen, setVideoModalOpen] = useState(false);
+  const [selectedPlatforms, setSelectedPlatforms] = useState<string[]>([]);
+
+  const togglePlatform = (platform: string) => {
+    setSelectedPlatforms((prev) =>
+      prev.includes(platform) ? prev.filter((p) => p !== platform) : [...prev, platform]
+    );
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -30,7 +37,13 @@ export default function Home() {
       await emailjs.send(
         "service_qaoxsvm",
         "template_ncdlbo8",
-        { from_name: name, from_email: email, message },
+        {
+          from_name: name,
+          from_email: email,
+          message: selectedPlatforms.length
+            ? `Early Access Platforms: ${selectedPlatforms.join(", ")}\n\n${message}`
+            : message,
+        },
         "IO_JZYXks_N8dNh79"
       );
       setSubmitted(true);
@@ -212,8 +225,8 @@ export default function Home() {
 
       {/* Platforms */}
       <section id="platforms" className="py-20 md:py-32 px-6 max-w-4xl mx-auto text-center">
-        <h2 className="text-3xl md:text-4xl font-black uppercase mb-4">Coming Soon</h2>
-        <p className="text-zinc-400 mb-12 text-base md:text-lg">Coming to your multiple platforms</p>
+        <h2 className="text-3xl md:text-4xl font-black uppercase mb-4">Available On</h2>
+        <p className="text-zinc-400 mb-12 text-base md:text-lg">Coming to multiple platforms</p>
         <div className="flex flex-col sm:flex-row items-center justify-center gap-8 md:gap-16">
           {[
             { src: "/images/ios.png", alt: "iOS" },
@@ -302,12 +315,27 @@ export default function Home() {
                 required
                 className="text-base px-5 py-4 rounded-xl bg-zinc-800 border border-white/10 text-white placeholder-zinc-500 focus:outline-none focus:border-red-500"
               />
+              <div className="rounded-xl bg-zinc-800 border border-white/10 px-5 py-4 flex flex-col gap-3">
+                <p className="text-zinc-300 text-sm font-semibold">Requesting early access? Select your platform(s):</p>
+                <div className="flex flex-wrap gap-4">
+                  {["iOS", "Android", "Steam"].map((platform) => (
+                    <label key={platform} className="flex items-center gap-2 cursor-pointer group">
+                      <input
+                        type="checkbox"
+                        checked={selectedPlatforms.includes(platform)}
+                        onChange={() => togglePlatform(platform)}
+                        className="w-4 h-4 accent-red-500 cursor-pointer"
+                      />
+                      <span className="text-zinc-300 text-sm group-hover:text-white transition-colors">{platform}</span>
+                    </label>
+                  ))}
+                </div>
+              </div>
               <textarea
                 placeholder="Message"
                 value={message}
                 onChange={(e) => setMessage(e.target.value)}
-                required
-                rows={5}
+                rows={4}
                 className="text-base px-5 py-4 rounded-xl bg-zinc-800 border border-white/10 text-white placeholder-zinc-500 focus:outline-none focus:border-red-500 resize-none"
               />
               <button
