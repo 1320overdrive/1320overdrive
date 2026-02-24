@@ -24,6 +24,12 @@ export default function Home() {
   const [videoModalOpen, setVideoModalOpen] = useState(false);
   const [selectedPlatforms, setSelectedPlatforms] = useState<string[]>([]);
 
+  // Newsletter state
+  const [newsletterEmail, setNewsletterEmail] = useState("");
+  const [newsletterSubmitted, setNewsletterSubmitted] = useState(false);
+  const [newsletterLoading, setNewsletterLoading] = useState(false);
+  const [newsletterError, setNewsletterError] = useState("");
+
   const togglePlatform = (platform: string) => {
     setSelectedPlatforms((prev) =>
       prev.includes(platform) ? prev.filter((p) => p !== platform) : [...prev, platform]
@@ -51,6 +57,26 @@ export default function Home() {
       alert("Something went wrong. Please try again.");
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleNewsletterSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setNewsletterLoading(true);
+    setNewsletterError("");
+    try {
+      const res = await fetch("/api/subscribe", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: newsletterEmail }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || "Something went wrong.");
+      setNewsletterSubmitted(true);
+    } catch (err: any) {
+      setNewsletterError(err.message || "Something went wrong. Please try again.");
+    } finally {
+      setNewsletterLoading(false);
     }
   };
 
@@ -122,6 +148,8 @@ export default function Home() {
             <a href="#features" className="hover:text-white transition-colors">Features</a>
             <a href="#platforms" className="hover:text-white transition-colors">Platforms</a>
             <a href="#media" className="hover:text-white transition-colors">Media</a>
+            <a href="#newsletter" className="hover:text-white transition-colors">Newsletter</a>
+            <a href="#discord" className="hover:text-white transition-colors">Discord</a>
             <a href="#contact" className="hover:text-white transition-colors">Contact</a>
           </div>
 
@@ -144,20 +172,14 @@ export default function Home() {
             <a href="#features" onClick={() => setMenuOpen(false)} className="hover:text-white transition-colors">Features</a>
             <a href="#platforms" onClick={() => setMenuOpen(false)} className="hover:text-white transition-colors">Platforms</a>
             <a href="#media" onClick={() => setMenuOpen(false)} className="hover:text-white transition-colors">Media</a>
+            <a href="#newsletter" onClick={() => setMenuOpen(false)} className="hover:text-white transition-colors">Newsletter</a>
+            <a href="#discord" onClick={() => setMenuOpen(false)} className="hover:text-white transition-colors">Discord</a>
             <a href="#contact" onClick={() => setMenuOpen(false)} className="hover:text-white transition-colors">Contact</a>
           </div>
         )}
       </nav>
 
       {/* Hero with video background */}
-      {/*
-        Key mobile fixes:
-        - min-h-[100svh] uses "small viewport height" which accounts for iOS Safari's
-          collapsible browser chrome, preventing the section from being taller than the screen.
-        - The video uses object-cover + object-center so it always fills the frame on any
-          aspect ratio (portrait on phones, landscape on desktop).
-        - A slightly stronger overlay (bg-black/65) improves text legibility on bright video frames.
-      */}
       <section className="relative min-h-[100svh] flex flex-col items-center justify-center text-center px-6 overflow-hidden">
         <video
           autoPlay
@@ -176,13 +198,11 @@ export default function Home() {
           <p className="text-zinc-300 text-base sm:text-xl max-w-xl leading-relaxed">
             The ultimate mobile drag racing experience. Full throttle. No limits.
           </p>
-          {/* Play button */}
           <button
             onClick={() => setVideoModalOpen(true)}
             className="mt-2 group flex items-center gap-3 bg-white/10 hover:bg-red-600 active:bg-red-700 border border-white/20 hover:border-red-600 backdrop-blur-sm text-white font-bold px-6 py-3 rounded-full uppercase tracking-widest text-sm transition-all duration-200 touch-manipulation"
           >
             <span className="flex items-center justify-center w-6 h-6 rounded-full border-2 border-white group-hover:border-white">
-              {/* Triangle play icon */}
               <svg className="w-3 h-3 fill-white ml-0.5" viewBox="0 0 10 10">
                 <polygon points="1,0 9,5 1,10" />
               </svg>
@@ -207,7 +227,6 @@ export default function Home() {
       <section id="features" className="py-20 md:py-32 px-6 bg-zinc-950">
         <div className="max-w-4xl mx-auto text-center">
           <h2 className="text-3xl md:text-4xl font-black uppercase mb-12 md:mb-16">Features</h2>
-          {/* Single column on mobile, 3 columns on md+ */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-10">
             {[
               { title: "Custom Builds", desc: "Tune and upgrade your car to perfection." },
@@ -225,7 +244,7 @@ export default function Home() {
 
       {/* Platforms */}
       <section id="platforms" className="py-20 md:py-32 px-6 max-w-4xl mx-auto text-center">
-        <h2 className="text-3xl md:text-4xl font-black uppercase mb-4">Available On</h2>
+        <h2 className="text-3xl md:text-4xl font-black uppercase mb-4">Coming Soon</h2>
         <p className="text-zinc-400 mb-12 text-base md:text-lg">Coming to multiple platforms</p>
         <div className="flex flex-col sm:flex-row items-center justify-center gap-8 md:gap-16">
           {[
@@ -233,17 +252,9 @@ export default function Home() {
             { src: "/images/android.png", alt: "Android" },
             { src: "/images/steam.png", alt: "Steam" },
           ].map((p) => (
-            <div
-              key={p.alt}
-              className="flex flex-col items-center gap-3 group"
-            >
+            <div key={p.alt} className="flex flex-col items-center gap-3 group">
               <div className="w-20 h-20 md:w-24 md:h-24 relative flex items-center justify-center rounded-2xl border border-white/10 bg-zinc-900 p-2 group-hover:border-red-500 group-hover:bg-zinc-800 transition-all duration-200">
-                <Image
-                  src={p.src}
-                  alt={p.alt}
-                  fill
-                  className="object-contain p-2"
-                />
+                <Image src={p.src} alt={p.alt} fill className="object-contain p-2" />
               </div>
               <span className="text-zinc-400 text-sm font-semibold uppercase tracking-widest group-hover:text-white transition-colors">
                 {p.alt}
@@ -257,13 +268,11 @@ export default function Home() {
       <section id="media" className="py-20 md:py-32 px-6 max-w-5xl mx-auto text-center">
         <h2 className="text-3xl md:text-4xl font-black uppercase mb-12 md:mb-16">Media</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
-          {/* Video — full width */}
           <div className="md:col-span-2 rounded-2xl overflow-hidden border border-white/10">
             <video controls className="w-full object-cover" playsInline>
               <source src="/videos/gameplay2.mp4" type="video/mp4" />
             </video>
           </div>
-          {/* Screenshots — 1 col on mobile, 2 col on md+ */}
           {screenshots.map((s) => (
             <div
               key={s.src}
@@ -287,6 +296,79 @@ export default function Home() {
         </div>
       </section>
 
+      {/* Newsletter */}
+      <section id="newsletter" className="py-20 md:py-32 px-6 bg-zinc-950">
+        <div className="max-w-xl mx-auto text-center">
+          <div className="flex items-center justify-center w-14 h-14 rounded-full bg-red-600/20 border border-red-600/40 mx-auto mb-6">
+            <svg className="w-6 h-6 text-red-500" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+            </svg>
+          </div>
+          <h2 className="text-3xl md:text-4xl font-black uppercase mb-4">Stay in the Loop</h2>
+          <p className="text-zinc-400 mb-10 text-base md:text-lg">
+            Be the first to know when 1320 OverDrive launches. No spam — just launch news and big updates.
+          </p>
+          {newsletterSubmitted ? (
+            <div className="flex flex-col items-center gap-3">
+              <div className="flex items-center justify-center w-14 h-14 rounded-full bg-green-600/20 border border-green-600/40">
+                <svg className="w-7 h-7 text-green-400" fill="none" stroke="currentColor" strokeWidth={2.5} viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                </svg>
+              </div>
+              <p className="text-green-400 font-semibold text-lg">You're on the list!</p>
+              <p className="text-zinc-500 text-sm">We'll reach out when launch day arrives.</p>
+            </div>
+          ) : (
+            <form onSubmit={handleNewsletterSubmit} className="flex flex-col sm:flex-row gap-3">
+              <input
+                type="email"
+                placeholder="Enter your email"
+                value={newsletterEmail}
+                onChange={(e) => setNewsletterEmail(e.target.value)}
+                required
+                className="flex-1 text-base px-5 py-4 rounded-full bg-zinc-800 border border-white/10 text-white placeholder-zinc-500 focus:outline-none focus:border-red-500"
+              />
+              <button
+                type="submit"
+                disabled={newsletterLoading}
+                className="bg-red-600 hover:bg-red-500 active:bg-red-700 disabled:bg-red-900 text-white font-bold px-8 py-4 rounded-full uppercase tracking-widest text-sm transition-colors whitespace-nowrap touch-manipulation"
+              >
+                {newsletterLoading ? "Subscribing..." : "Notify Me"}
+              </button>
+            </form>
+          )}
+          {newsletterError && (
+            <p className="mt-4 text-red-400 text-sm">{newsletterError}</p>
+          )}
+        </div>
+      </section>
+
+      {/* Discord */}
+    {/*}  <section id="discord" className="py-20 md:py-32 px-6 bg-black">
+        <div className="max-w-xl mx-auto text-center">
+          <div className="flex items-center justify-center w-14 h-14 rounded-full bg-indigo-600/20 border border-indigo-500/40 mx-auto mb-6">
+            <svg className="w-7 h-7 text-indigo-400" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028c.462-.63.874-1.295 1.226-1.994a.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z"/>
+            </svg>
+          </div>
+          <h2 className="text-3xl md:text-4xl font-black uppercase mb-4">Join the Community</h2>
+          <p className="text-zinc-400 mb-10 text-base md:text-lg">
+            Connect with other racers, share your builds, get early updates, and talk directly with the dev. See you on the track.
+          </p>
+          <a
+            href="https://discord.gg/k5fAhNkpm"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-3 bg-indigo-600 hover:bg-indigo-500 active:bg-indigo-700 text-white font-bold px-10 py-4 rounded-full uppercase tracking-widest text-sm transition-colors touch-manipulation"
+          >
+            <svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028c.462-.63.874-1.295 1.226-1.994a.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z"/>
+            </svg>
+            Join Our Discord
+          </a>
+        </div>
+      </section> */}
+
       {/* Contact */}
       <section id="contact" className="py-20 md:py-32 px-6 bg-zinc-950">
         <div className="max-w-xl mx-auto text-center">
@@ -304,7 +386,6 @@ export default function Home() {
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 required
-                /* text-base prevents iOS from auto-zooming on focus (requires font-size >= 16px) */
                 className="text-base px-5 py-4 rounded-xl bg-zinc-800 border border-white/10 text-white placeholder-zinc-500 focus:outline-none focus:border-red-500"
               />
               <input
