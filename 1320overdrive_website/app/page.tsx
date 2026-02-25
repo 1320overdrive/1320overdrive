@@ -129,7 +129,8 @@ export default function Home() {
               playsInline
               className="w-full rounded-xl"
             >
-              <source src="/videos/gameplay1.mp4" type="video/mp4" />
+              {/*<source src="/videos/gameplay1.mp4" type="video/mp4" /> */}
+              <source src="/videos/trailer-with-song.mp4" type="video/mp4" />
             </video>
           </div>
         </div>
@@ -207,7 +208,7 @@ export default function Home() {
                 <polygon points="1,0 9,5 1,10" />
               </svg>
             </span>
-            Watch Gameplay
+            Watch Trailer
           </button>
         </div>
       </section>
