@@ -288,12 +288,12 @@ export default function Home() {
                              bg-zinc-900 hover:bg-red-600
                              border border-white/15 hover:border-red-500
                              rounded-xl
-                             w-[52px] h-[52px]
-                             sm:w-auto sm:h-auto sm:flex-row sm:gap-1.5 sm:px-3 sm:py-2
+                             w-[62px] h-[62px]
+                             sm:w-auto sm:h-auto sm:flex-row sm:gap-2 sm:px-3 sm:py-2
                              transition-all duration-200 touch-manipulation"
                 >
                   {/* Platform icon */}
-                  <div className="relative w-5 h-5 flex-shrink-0">
+                  <div className="relative w-10 h-10 flex-shrink-0">
                     <Image
                       src={p.src}
                       alt={p.alt}
