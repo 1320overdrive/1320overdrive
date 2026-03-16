@@ -408,19 +408,21 @@ export default function Home() {
         <h2 className="text-3xl md:text-4xl font-black uppercase mb-4">Coming Soon</h2>
         <p className="text-zinc-400 mb-12 text-base md:text-lg">Coming to multiple platforms</p>
         <div className="flex flex-col sm:flex-row items-center justify-center gap-8 md:gap-16">
-          {[
-            { src: "/images/ios.png",     alt: "iOS" },
-            { src: "/images/android.png", alt: "Android" },
-            { src: "/images/steam.png",   alt: "Steam" },
-          ].map((p) => (
-            <div key={p.alt} className="flex flex-col items-center gap-3 group">
+          {downloadPlatforms.map((p) => (
+            <a
+              key={p.alt}
+              href={p.href}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex flex-col items-center gap-3 group"
+            >
               <div className="w-20 h-20 md:w-24 md:h-24 relative flex items-center justify-center rounded-2xl border border-white/10 bg-zinc-900 p-2 group-hover:border-red-500 group-hover:bg-zinc-800 transition-all duration-200">
                 <Image src={p.src} alt={p.alt} fill className="object-contain p-2" />
               </div>
               <span className="text-zinc-400 text-sm font-semibold uppercase tracking-widest group-hover:text-white transition-colors">
                 {p.alt}
               </span>
-            </div>
+            </a>
           ))}
         </div>
       </section>
