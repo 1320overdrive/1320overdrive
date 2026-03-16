@@ -13,6 +13,32 @@ const screenshots = [
   { src: "/images/rainy-race.png", alt: "Rainy Race" },
 ];
 
+// ─── TODO: Replace "#" with your real store URLs when they go live ───────────
+const downloadPlatforms = [
+  {
+    key: "ios",
+    src: "/images/ios.png",
+    alt: "iOS",
+    label: "App Store",
+    href: "https://testflight.apple.com/join/CGeCZz8M",
+  },
+  {
+    key: "android",
+    src: "/images/android.png",
+    alt: "Android",
+    label: "Google Play",
+    href: "https://play.google.com/apps/test/RQBBtzoq7Rc/ahAO29uNSPPK-y_r2qAmH31VxAXIu39QSQpXxlTq2x5keFbGOHwruWW_M-8yOmyoCGxVe_HfmQ9ak_C4441eJVXs_c",
+  },
+  {
+    key: "steam",
+    src: "/images/steam.png",
+    alt: "Steam",
+    label: "Steam",
+    href: "https://store.steampowered.com/app/4485860/1320_Overdrive/",
+  },
+];
+// ─────────────────────────────────────────────────────────────────────────────
+
 const socialLinks = [
   {
     name: "Discord",
@@ -215,46 +241,101 @@ export default function Home() {
         </div>
       )}
 
-      {/* Navigation */}
-      <nav className="fixed top-0 w-full z-40 bg-black/80 backdrop-blur-sm border-b border-white/10 px-6 py-4">
-        <div className="flex items-center justify-between">
-          <Link href="/">
-            <Image src="/images/logo.png" alt="1320 OverDrive Logo" width={120} height={40} />
+      {/* ─── Navigation ──────────────────────────────────────────────────────── */}
+      <nav className="fixed top-0 w-full z-40 bg-black/80 backdrop-blur-sm border-b border-white/10 px-4 sm:px-6">
+        {/* ── Row 1: Logo | Desktop nav links | Download buttons + Hamburger ── */}
+        <div className="flex items-center justify-between py-3 sm:py-4 gap-3">
+          {/* Logo */}
+          <Link href="/" className="flex-shrink-0">
+            <Image
+              src="/images/logo.png"
+              alt="1320 OverDrive Logo"
+              width={120}
+              height={40}
+              className="w-24 sm:w-[120px] h-auto"
+            />
           </Link>
 
-          {/* Desktop nav links */}
-          <div className="hidden md:flex gap-8 text-sm text-zinc-400">
-            <a href="#about" className="hover:text-white transition-colors">About</a>
-            <a href="#features" className="hover:text-white transition-colors">Features</a>
-            <a href="#platforms" className="hover:text-white transition-colors">Platforms</a>
-            <a href="#media" className="hover:text-white transition-colors">Media</a>
+          {/* Desktop nav links (hidden on mobile) */}
+          <div className="hidden md:flex gap-6 lg:gap-8 text-sm text-zinc-400 flex-shrink-0">
+            <a href="#about"      className="hover:text-white transition-colors">About</a>
+            <a href="#features"   className="hover:text-white transition-colors">Features</a>
+            <a href="#platforms"  className="hover:text-white transition-colors">Platforms</a>
+            <a href="#media"      className="hover:text-white transition-colors">Media</a>
             <a href="#newsletter" className="hover:text-white transition-colors">Newsletter</a>
-            <a href="#community" className="hover:text-white transition-colors">Community</a>
-            <a href="#contact" className="hover:text-white transition-colors">Contact</a>
+            <a href="#community"  className="hover:text-white transition-colors">Community</a>
+            <a href="#contact"    className="hover:text-white transition-colors">Contact</a>
           </div>
 
-          {/* Mobile hamburger */}
-          <button
-            className="md:hidden flex flex-col gap-1.5 p-2"
-            onClick={() => setMenuOpen(!menuOpen)}
-            aria-label="Toggle menu"
-          >
-            <span className={`block w-6 h-0.5 bg-white transition-transform duration-200 ${menuOpen ? "rotate-45 translate-y-2" : ""}`} />
-            <span className={`block w-6 h-0.5 bg-white transition-opacity duration-200 ${menuOpen ? "opacity-0" : ""}`} />
-            <span className={`block w-6 h-0.5 bg-white transition-transform duration-200 ${menuOpen ? "-rotate-45 -translate-y-2" : ""}`} />
-          </button>
+          {/* Right group: Download buttons + hamburger */}
+          <div className="flex items-center gap-2 flex-shrink-0">
+            {/*
+              ── DOWNLOAD BUTTONS ──────────────────────────────────────────────
+              Mobile  : icon + short label stacked — easy tap targets
+              Desktop : icon + label inline, slightly larger
+              TODO    : swap href="#" for real store URLs in downloadPlatforms[]
+              ─────────────────────────────────────────────────────────────────
+            */}
+            <div className="flex items-center gap-1.5">
+              {downloadPlatforms.map((p) => (
+                <a
+                  key={p.key}
+                  href={p.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  title={`Download on ${p.label}`}
+                  className="group flex flex-col items-center justify-center gap-0.5
+                             bg-zinc-900 hover:bg-red-600
+                             border border-white/15 hover:border-red-500
+                             rounded-xl
+                             w-[52px] h-[52px]
+                             sm:w-auto sm:h-auto sm:flex-row sm:gap-1.5 sm:px-3 sm:py-2
+                             transition-all duration-200 touch-manipulation"
+                >
+                  {/* Platform icon */}
+                  <div className="relative w-5 h-5 flex-shrink-0">
+                    <Image
+                      src={p.src}
+                      alt={p.alt}
+                      fill
+                      className="object-contain"
+                    />
+                  </div>
+                  {/* Label — two-line on mobile (tiny), single-line on sm+ */}
+                  <span className="text-zinc-400 group-hover:text-white font-semibold
+                                   uppercase tracking-wide leading-tight text-center
+                                   text-[9px] sm:text-[11px] transition-colors">
+                    {/* Mobile shows short platform name; sm+ shows store label */}
+                    <span className="sm:hidden">{p.alt}</span>
+                    <span className="hidden sm:inline whitespace-nowrap">{p.label}</span>
+                  </span>
+                </a>
+              ))}
+            </div>
+
+            {/* Hamburger — mobile only */}
+            <button
+              className="md:hidden flex flex-col gap-1.5 p-2 ml-1"
+              onClick={() => setMenuOpen(!menuOpen)}
+              aria-label="Toggle menu"
+            >
+              <span className={`block w-6 h-0.5 bg-white transition-transform duration-200 ${menuOpen ? "rotate-45 translate-y-2" : ""}`} />
+              <span className={`block w-6 h-0.5 bg-white transition-opacity duration-200 ${menuOpen ? "opacity-0" : ""}`} />
+              <span className={`block w-6 h-0.5 bg-white transition-transform duration-200 ${menuOpen ? "-rotate-45 -translate-y-2" : ""}`} />
+            </button>
+          </div>
         </div>
 
-        {/* Mobile dropdown menu */}
+        {/* ── Mobile dropdown menu ─────────────────────────────────────────── */}
         {menuOpen && (
-          <div className="md:hidden mt-4 pb-2 flex flex-col gap-4 text-sm text-zinc-400 border-t border-white/10 pt-4">
-            <a href="#about" onClick={() => setMenuOpen(false)} className="hover:text-white transition-colors">About</a>
-            <a href="#features" onClick={() => setMenuOpen(false)} className="hover:text-white transition-colors">Features</a>
-            <a href="#platforms" onClick={() => setMenuOpen(false)} className="hover:text-white transition-colors">Platforms</a>
-            <a href="#media" onClick={() => setMenuOpen(false)} className="hover:text-white transition-colors">Media</a>
+          <div className="md:hidden pb-4 flex flex-col gap-4 text-sm text-zinc-400 border-t border-white/10 pt-4">
+            <a href="#about"      onClick={() => setMenuOpen(false)} className="hover:text-white transition-colors">About</a>
+            <a href="#features"   onClick={() => setMenuOpen(false)} className="hover:text-white transition-colors">Features</a>
+            <a href="#platforms"  onClick={() => setMenuOpen(false)} className="hover:text-white transition-colors">Platforms</a>
+            <a href="#media"      onClick={() => setMenuOpen(false)} className="hover:text-white transition-colors">Media</a>
             <a href="#newsletter" onClick={() => setMenuOpen(false)} className="hover:text-white transition-colors">Newsletter</a>
-            <a href="#community" onClick={() => setMenuOpen(false)} className="hover:text-white transition-colors">Community</a>
-            <a href="#contact" onClick={() => setMenuOpen(false)} className="hover:text-white transition-colors">Contact</a>
+            <a href="#community"  onClick={() => setMenuOpen(false)} className="hover:text-white transition-colors">Community</a>
+            <a href="#contact"    onClick={() => setMenuOpen(false)} className="hover:text-white transition-colors">Contact</a>
           </div>
         )}
       </nav>
@@ -322,15 +403,15 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Platforms */}
+      {/* Platforms — icons stay exactly as before */}
       <section id="platforms" className="py-20 md:py-32 px-6 max-w-4xl mx-auto text-center">
         <h2 className="text-3xl md:text-4xl font-black uppercase mb-4">Coming Soon</h2>
         <p className="text-zinc-400 mb-12 text-base md:text-lg">Coming to multiple platforms</p>
         <div className="flex flex-col sm:flex-row items-center justify-center gap-8 md:gap-16">
           {[
-            { src: "/images/ios.png", alt: "iOS" },
+            { src: "/images/ios.png",     alt: "iOS" },
             { src: "/images/android.png", alt: "Android" },
-            { src: "/images/steam.png", alt: "Steam" },
+            { src: "/images/steam.png",   alt: "Steam" },
           ].map((p) => (
             <div key={p.alt} className="flex flex-col items-center gap-3 group">
               <div className="w-20 h-20 md:w-24 md:h-24 relative flex items-center justify-center rounded-2xl border border-white/10 bg-zinc-900 p-2 group-hover:border-red-500 group-hover:bg-zinc-800 transition-all duration-200">
