@@ -27,7 +27,7 @@ const downloadPlatforms = [
     src: "/images/android.png",
     alt: "Android",
     label: "Google Play",
-    href: "https://play.google.com/apps/test/RQBBtzoq7Rc/ahAO29uNSPPK-y_r2qAmH31VxAXIu39QSQpXxlTq2x5keFbGOHwruWW_M-8yOmyoCGxVe_HfmQ9ak_C4441eJVXs_c",
+    href: "https://play.google.com/store/apps/details?id=com.overdrive.app1320",
   },
   {
     key: "steam",
