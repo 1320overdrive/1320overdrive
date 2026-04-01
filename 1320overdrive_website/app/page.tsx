@@ -13,7 +13,6 @@ const screenshots = [
   { src: "/images/rainy-race.png", alt: "Rainy Race" },
 ];
 
-// ─── TODO: Replace "#" with your real store URLs when they go live ───────────
 const downloadPlatforms = [
   {
     key: "ios",
@@ -37,7 +36,6 @@ const downloadPlatforms = [
     href: "https://store.steampowered.com/app/4485860/1320_Overdrive/",
   },
 ];
-// ─────────────────────────────────────────────────────────────────────────────
 
 const socialLinks = [
   {
@@ -119,15 +117,26 @@ const socialLinks = [
 ];
 
 export default function Home() {
+  // Contact form state
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [selectedPlatforms, setSelectedPlatforms] = useState<string[]>([]);
+
+  // Decal form state
+  const [decalName, setDecalName] = useState("");
+  const [decalEmail, setDecalEmail] = useState("");
+  const [decalLink, setDecalLink] = useState("");
+  const [decalNote, setDecalNote] = useState("");
+  const [decalSubmitted, setDecalSubmitted] = useState(false);
+  const [decalLoading, setDecalLoading] = useState(false);
+
+  // UI state
   const [lightbox, setLightbox] = useState<string | null>(null);
   const [menuOpen, setMenuOpen] = useState(false);
   const [videoModalOpen, setVideoModalOpen] = useState(false);
-  const [selectedPlatforms, setSelectedPlatforms] = useState<string[]>([]);
 
   // Newsletter state
   const [newsletterEmail, setNewsletterEmail] = useState("");
@@ -165,6 +174,28 @@ export default function Home() {
     }
   };
 
+  const handleDecalSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setDecalLoading(true);
+    try {
+      await emailjs.send(
+        "service_qaoxsvm",
+        "template_ncdlbo8",
+        {
+          from_name: decalName,
+          from_email: decalEmail,
+          message: `🏁 DECAL SUBMISSION\n\n${decalLink ? `Decal Link: ${decalLink}\n\n` : ""}Notes: ${decalNote}`,
+        },
+        "IO_JZYXks_N8dNh79"
+      );
+      setDecalSubmitted(true);
+    } catch (error) {
+      alert("Something went wrong. Please try again.");
+    } finally {
+      setDecalLoading(false);
+    }
+  };
+
   const handleNewsletterSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setNewsletterLoading(true);
@@ -187,6 +218,26 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-black text-white font-sans">
+
+      {/* ─── Sticky Decal Banner ──────────────────────────────────────────────── */}
+      <div className="fixed top-0 left-0 right-0 z-50 overflow-hidden">
+        <div className="relative bg-red-600 text-white text-center py-2.5 px-4 flex items-center justify-center gap-2 sm:gap-4">
+          {/* Diagonal racing stripe accents */}
+          <div className="absolute left-0 top-0 h-full w-20 bg-black/20 skew-x-12 -translate-x-6 pointer-events-none" />
+          <div className="absolute right-0 top-0 h-full w-20 bg-black/20 -skew-x-12 translate-x-6 pointer-events-none" />
+          <span className="hidden sm:inline text-base">🏁</span>
+          <p className="font-black uppercase tracking-widest text-[10px] sm:text-xs leading-tight">
+            Got a decal you want in the game?
+          </p>
+          <a
+            href="#decals"
+            className="flex-shrink-0 bg-white text-red-600 font-black text-[10px] sm:text-xs uppercase tracking-widest px-3 py-1.5 rounded-full hover:bg-yellow-300 hover:text-black transition-colors duration-150 whitespace-nowrap"
+          >
+            Submit Yours →
+          </a>
+          <span className="hidden sm:inline text-base">🏁</span>
+        </div>
+      </div>
 
       {/* Lightbox */}
       {lightbox && (
@@ -228,13 +279,7 @@ export default function Home() {
             className="relative w-full max-w-5xl"
             onClick={(e) => e.stopPropagation()}
           >
-            <video
-              controls
-              autoPlay
-              playsInline
-              className="w-full rounded-xl"
-            >
-              {/*<source src="/videos/gameplay1.mp4" type="video/mp4" /> */}
+            <video controls autoPlay playsInline className="w-full rounded-xl">
               <source src="/videos/trailer-with-song.mp4" type="video/mp4" />
             </video>
           </div>
@@ -242,8 +287,8 @@ export default function Home() {
       )}
 
       {/* ─── Navigation ──────────────────────────────────────────────────────── */}
-      <nav className="fixed top-0 w-full z-40 bg-black/80 backdrop-blur-sm border-b border-white/10 px-4 sm:px-6">
-        {/* ── Row 1: Logo | Desktop nav links | Download buttons + Hamburger ── */}
+      {/* top-10 accounts for the sticky decal banner above */}
+      <nav className="fixed top-10 w-full z-40 bg-black/80 backdrop-blur-sm border-b border-white/10 px-4 sm:px-6">
         <div className="flex items-center justify-between py-3 sm:py-4 gap-3">
           {/* Logo */}
           <Link href="/" className="flex-shrink-0">
@@ -256,10 +301,11 @@ export default function Home() {
             />
           </Link>
 
-          {/* Desktop nav links (hidden on mobile) */}
+          {/* Desktop nav links */}
           <div className="hidden md:flex gap-6 lg:gap-8 text-sm text-zinc-400 flex-shrink-0">
             <a href="#about"      className="hover:text-white transition-colors">About</a>
             <a href="#features"   className="hover:text-white transition-colors">Features</a>
+            <a href="#decals"     className="hover:text-white transition-colors">Decals</a>
             <a href="#platforms"  className="hover:text-white transition-colors">Platforms</a>
             <a href="#media"      className="hover:text-white transition-colors">Media</a>
             <a href="#newsletter" className="hover:text-white transition-colors">Newsletter</a>
@@ -269,13 +315,6 @@ export default function Home() {
 
           {/* Right group: Download buttons + hamburger */}
           <div className="flex items-center gap-2 flex-shrink-0">
-            {/*
-              ── DOWNLOAD BUTTONS ──────────────────────────────────────────────
-              Mobile  : icon + short label stacked — easy tap targets
-              Desktop : icon + label inline, slightly larger
-              TODO    : swap href="#" for real store URLs in downloadPlatforms[]
-              ─────────────────────────────────────────────────────────────────
-            */}
             <div className="flex items-center gap-1.5">
               {downloadPlatforms.map((p) => (
                 <a
@@ -292,20 +331,12 @@ export default function Home() {
                              sm:w-auto sm:h-auto sm:flex-row sm:gap-2 sm:px-3 sm:py-2
                              transition-all duration-200 touch-manipulation"
                 >
-                  {/* Platform icon */}
                   <div className="relative w-10 h-10 flex-shrink-0">
-                    <Image
-                      src={p.src}
-                      alt={p.alt}
-                      fill
-                      className="object-contain"
-                    />
+                    <Image src={p.src} alt={p.alt} fill className="object-contain" />
                   </div>
-                  {/* Label — two-line on mobile (tiny), single-line on sm+ */}
                   <span className="text-zinc-400 group-hover:text-white font-semibold
                                    uppercase tracking-wide leading-tight text-center
                                    text-[9px] sm:text-[11px] transition-colors">
-                    {/* Mobile shows short platform name; sm+ shows store label */}
                     <span className="sm:hidden">{p.alt}</span>
                     <span className="hidden sm:inline whitespace-nowrap">{p.label}</span>
                   </span>
@@ -326,11 +357,12 @@ export default function Home() {
           </div>
         </div>
 
-        {/* ── Mobile dropdown menu ─────────────────────────────────────────── */}
+        {/* Mobile dropdown */}
         {menuOpen && (
           <div className="md:hidden pb-4 flex flex-col gap-4 text-sm text-zinc-400 border-t border-white/10 pt-4">
             <a href="#about"      onClick={() => setMenuOpen(false)} className="hover:text-white transition-colors">About</a>
             <a href="#features"   onClick={() => setMenuOpen(false)} className="hover:text-white transition-colors">Features</a>
+            <a href="#decals"     onClick={() => setMenuOpen(false)} className="hover:text-white transition-colors">Decals</a>
             <a href="#platforms"  onClick={() => setMenuOpen(false)} className="hover:text-white transition-colors">Platforms</a>
             <a href="#media"      onClick={() => setMenuOpen(false)} className="hover:text-white transition-colors">Media</a>
             <a href="#newsletter" onClick={() => setMenuOpen(false)} className="hover:text-white transition-colors">Newsletter</a>
@@ -340,7 +372,8 @@ export default function Home() {
         )}
       </nav>
 
-      {/* Hero with video background */}
+      {/* ─── Hero ────────────────────────────────────────────────────────────── */}
+      {/* pt accounts for banner (40px) + nav (~80px) */}
       <section className="relative min-h-[100svh] flex flex-col items-center justify-center text-center px-6 overflow-hidden">
         <video
           autoPlay
@@ -373,7 +406,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* About */}
+      {/* ─── About ───────────────────────────────────────────────────────────── */}
       <section id="about" className="py-20 md:py-32 px-6 max-w-4xl mx-auto text-center">
         <h2 className="text-3xl md:text-4xl font-black uppercase mb-6">About the Game</h2>
         <p className="text-zinc-400 text-base md:text-lg leading-relaxed">
@@ -384,7 +417,7 @@ export default function Home() {
         </p>
       </section>
 
-      {/* Features */}
+      {/* ─── Features ────────────────────────────────────────────────────────── */}
       <section id="features" className="py-20 md:py-32 px-6 bg-zinc-950">
         <div className="max-w-4xl mx-auto text-center">
           <h2 className="text-3xl md:text-4xl font-black uppercase mb-12 md:mb-16">Features</h2>
@@ -403,7 +436,92 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Platforms — icons stay exactly as before */}
+      {/* ─── Decal Submission ────────────────────────────────────────────────── */}
+      <section id="decals" className="py-20 md:py-32 px-6 bg-black relative overflow-hidden">
+        {/* Background racing stripe texture */}
+        <div
+          className="absolute inset-0 opacity-[0.04] pointer-events-none"
+          style={{
+            backgroundImage: "repeating-linear-gradient(45deg, #fff 0, #fff 1px, transparent 0, transparent 50%)",
+            backgroundSize: "20px 20px",
+          }}
+        />
+        {/* Red glow blob */}
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[300px] bg-red-600/10 rounded-full blur-3xl pointer-events-none" />
+
+        <div className="max-w-xl mx-auto text-center relative z-10">
+          {/* Badge */}
+          <div className="inline-flex items-center gap-2 bg-red-600 text-white text-xs font-black uppercase tracking-widest px-4 py-2 rounded-full mb-6">
+            🔥 Exclusive Opportunity
+          </div>
+
+          <h2 className="text-4xl md:text-5xl font-black uppercase mb-4 leading-tight">
+            Your Decal.<br />
+            <span className="text-red-500">Our Track.</span>
+          </h2>
+          <p className="text-zinc-400 text-base md:text-lg mb-10 leading-relaxed">
+            Got a design that belongs on a race car? Submit it and we'll feature it in‑game.
+            Your art. Real races. Real players seeing it every run.
+          </p>
+
+          {decalSubmitted ? (
+            <div className="flex flex-col items-center gap-3">
+              <div className="flex items-center justify-center w-16 h-16 rounded-full bg-green-600/20 border border-green-600/40">
+                <svg className="w-8 h-8 text-green-400" fill="none" stroke="currentColor" strokeWidth={2.5} viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                </svg>
+              </div>
+              <p className="text-green-400 font-black text-xl uppercase tracking-wide">Decal Submitted!</p>
+              <p className="text-zinc-500 text-sm">We'll review your design and reach out if it makes the cut.</p>
+            </div>
+          ) : (
+            <form onSubmit={handleDecalSubmit} className="flex flex-col gap-4 text-left">
+              <input
+                type="text"
+                placeholder="Your Name"
+                value={decalName}
+                onChange={(e) => setDecalName(e.target.value)}
+                required
+                className="text-base px-5 py-4 rounded-xl bg-zinc-900 border border-white/10 text-white placeholder-zinc-500 focus:outline-none focus:border-red-500"
+              />
+              <input
+                type="email"
+                placeholder="Your Email"
+                value={decalEmail}
+                onChange={(e) => setDecalEmail(e.target.value)}
+                required
+                className="text-base px-5 py-4 rounded-xl bg-zinc-900 border border-white/10 text-white placeholder-zinc-500 focus:outline-none focus:border-red-500"
+              />
+              <input
+                type="text"
+                placeholder="Link to your decal (Google Drive, Dropbox, etc.) — optional"
+                value={decalLink}
+                onChange={(e) => setDecalLink(e.target.value)}
+                className="text-base px-5 py-4 rounded-xl bg-zinc-900 border border-white/10 text-white placeholder-zinc-500 focus:outline-none focus:border-red-500"
+              />
+              <textarea
+                placeholder="Tell us about your design — what inspired it, what car it's for, anything you want us to know..."
+                value={decalNote}
+                onChange={(e) => setDecalNote(e.target.value)}
+                rows={4}
+                className="text-base px-5 py-4 rounded-xl bg-zinc-900 border border-white/10 text-white placeholder-zinc-500 focus:outline-none focus:border-red-500 resize-none"
+              />
+              <button
+                type="submit"
+                disabled={decalLoading}
+                className="bg-red-600 hover:bg-red-500 active:bg-red-700 disabled:bg-red-900 text-white font-black px-8 py-4 rounded-full uppercase tracking-widest text-sm transition-colors touch-manipulation"
+              >
+                {decalLoading ? "Submitting..." : "🏁 Submit My Decal"}
+              </button>
+              <p className="text-zinc-600 text-xs text-center">
+                We'll review every submission. Not all decals may make it in, but every one gets seen.
+              </p>
+            </form>
+          )}
+        </div>
+      </section>
+
+      {/* ─── Platforms ───────────────────────────────────────────────────────── */}
       <section id="platforms" className="py-20 md:py-32 px-6 max-w-4xl mx-auto text-center">
         <h2 className="text-3xl md:text-4xl font-black uppercase mb-4">Coming Soon</h2>
         <p className="text-zinc-400 mb-12 text-base md:text-lg">Coming to multiple platforms</p>
@@ -427,7 +545,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Media */}
+      {/* ─── Media ───────────────────────────────────────────────────────────── */}
       <section id="media" className="py-20 md:py-32 px-6 max-w-5xl mx-auto text-center">
         <h2 className="text-3xl md:text-4xl font-black uppercase mb-12 md:mb-16">Media</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
@@ -459,7 +577,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Newsletter */}
+      {/* ─── Newsletter ──────────────────────────────────────────────────────── */}
       <section id="newsletter" className="py-20 md:py-32 px-6 bg-zinc-950">
         <div className="max-w-xl mx-auto text-center">
           <div className="flex items-center justify-center w-14 h-14 rounded-full bg-red-600/20 border border-red-600/40 mx-auto mb-6">
@@ -506,7 +624,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Community (Discord + Social Media) */}
+      {/* ─── Community ───────────────────────────────────────────────────────── */}
       <section id="community" className="py-20 md:py-32 px-6 bg-black">
         <div className="max-w-3xl mx-auto text-center">
           <h2 className="text-3xl md:text-4xl font-black uppercase mb-4">Join the Community</h2>
@@ -529,9 +647,7 @@ export default function Home() {
                   <p className="text-white font-bold text-lg uppercase tracking-wide mb-1">{social.name}</p>
                   <p className="text-zinc-500 text-sm leading-relaxed">{social.description}</p>
                 </div>
-                <span
-                  className={`inline-flex items-center gap-2 ${social.colorClass} text-white font-bold px-6 py-3 rounded-full uppercase tracking-widest text-xs transition-all duration-200 touch-manipulation mt-auto`}
-                >
+                <span className={`inline-flex items-center gap-2 ${social.colorClass} text-white font-bold px-6 py-3 rounded-full uppercase tracking-widest text-xs transition-all duration-200 touch-manipulation mt-auto`}>
                   {social.buttonIcon}
                   {social.label}
                 </span>
@@ -541,7 +657,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Contact */}
+      {/* ─── Contact ─────────────────────────────────────────────────────────── */}
       <section id="contact" className="py-20 md:py-32 px-6 bg-zinc-950">
         <div className="max-w-xl mx-auto text-center">
           <h2 className="text-3xl md:text-4xl font-black uppercase mb-4">Contact Us</h2>
@@ -603,7 +719,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Footer */}
+      {/* ─── Footer ──────────────────────────────────────────────────────────── */}
       <footer className="border-t border-white/10 py-8 text-center text-zinc-600 text-sm px-6">
         © 2026 1320 OverDrive. All rights reserved.
       </footer>
