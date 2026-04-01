@@ -42,7 +42,7 @@ const downloadPlatforms = [
 const socialLinks = [
   {
     name: "Discord",
-    href: "https://discord.gg/k5fAhNkpm",
+    href: "https://discord.gg/DsCp2DBrEJ",
     label: "Join Our Discord",
     colorClass: "bg-indigo-600 hover:bg-indigo-500 active:bg-indigo-700",
     iconBgClass: "bg-indigo-600/20 border-indigo-500/40",
