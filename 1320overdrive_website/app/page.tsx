@@ -308,7 +308,7 @@ export default function Home() {
             <a href="#decals"     className="hover:text-white transition-colors">Decals</a>
             <a href="#platforms"  className="hover:text-white transition-colors">Platforms</a>
             <a href="#media"      className="hover:text-white transition-colors">Media</a>
-            <a href="#newsletter" className="hover:text-white transition-colors">Newsletter</a>
+            {/*<a href="#newsletter" className="hover:text-white transition-colors">Newsletter</a> */}
             <a href="#community"  className="hover:text-white transition-colors">Community</a>
             <a href="#contact"    className="hover:text-white transition-colors">Contact</a>
           </div>
@@ -578,7 +578,7 @@ export default function Home() {
       </section>
 
       {/* ─── Newsletter ──────────────────────────────────────────────────────── */}
-      <section id="newsletter" className="py-20 md:py-32 px-6 bg-zinc-950">
+      {/* <section id="newsletter" className="py-20 md:py-32 px-6 bg-zinc-950">
         <div className="max-w-xl mx-auto text-center">
           <div className="flex items-center justify-center w-14 h-14 rounded-full bg-red-600/20 border border-red-600/40 mx-auto mb-6">
             <svg className="w-6 h-6 text-red-500" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
@@ -622,7 +622,7 @@ export default function Home() {
             <p className="mt-4 text-red-400 text-sm">{newsletterError}</p>
           )}
         </div>
-      </section>
+      </section> */}
 
       {/* ─── Community ───────────────────────────────────────────────────────── */}
       <section id="community" className="py-20 md:py-32 px-6 bg-black">
