@@ -184,7 +184,7 @@ export default function Home() {
         {
           from_name: decalName,
           from_email: decalEmail,
-          message: `🏁 DECAL SUBMISSION\n\n${decalLink ? `Decal Link: ${decalLink}\n\n` : ""}Notes: ${decalNote}`,
+          message: `🏁 DECAL / CAR SUBMISSION\n\n${decalLink ? `Link: ${decalLink}\n\n` : ""}Notes: ${decalNote}`,
         },
         "IO_JZYXks_N8dNh79"
       );
@@ -227,7 +227,7 @@ export default function Home() {
           <div className="absolute right-0 top-0 h-full w-20 bg-black/20 -skew-x-12 translate-x-6 pointer-events-none" />
           <span className="hidden sm:inline text-base">🏁</span>
           <p className="font-black uppercase tracking-widest text-[10px] sm:text-xs leading-tight">
-            Got a decal you want in the game?
+            Got a decal or car photo you want in the game?
           </p>
           <a
             href="#decals"
@@ -457,11 +457,12 @@ export default function Home() {
 
           <h2 className="text-4xl md:text-5xl font-black uppercase mb-4 leading-tight">
             Your Decal.<br />
-            <span className="text-red-500">Our Track.</span>
+            <span className="text-red-500">Your Car. Our Track.</span>
           </h2>
           <p className="text-zinc-400 text-base md:text-lg mb-10 leading-relaxed">
-            Got a design that belongs on a race car? Submit it and we'll feature it in‑game.
-            Your art. Real races. Real players seeing it every run.
+            Got a decal design or photos of your real car? Submit them and we'll feature your
+            decal in-game — or convert your car into a 3D model that real players can race.
+            Your build. Real races. Real players every run.
           </p>
 
           {decalSubmitted ? (
@@ -471,8 +472,8 @@ export default function Home() {
                   <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
                 </svg>
               </div>
-              <p className="text-green-400 font-black text-xl uppercase tracking-wide">Decal Submitted!</p>
-              <p className="text-zinc-500 text-sm">We'll review your design and reach out if it makes the cut.</p>
+              <p className="text-green-400 font-black text-xl uppercase tracking-wide">Submission Received!</p>
+              <p className="text-zinc-500 text-sm">We'll review your submission and reach out if it makes the cut.</p>
             </div>
           ) : (
             <form onSubmit={handleDecalSubmit} className="flex flex-col gap-4 text-left">
@@ -494,13 +495,13 @@ export default function Home() {
               />
               <input
                 type="text"
-                placeholder="Link to your decal (Google Drive, Dropbox, etc.) — optional"
+                placeholder="Link to your decal or car photos (Google Drive, Dropbox, etc.) — optional"
                 value={decalLink}
                 onChange={(e) => setDecalLink(e.target.value)}
                 className="text-base px-5 py-4 rounded-xl bg-zinc-900 border border-white/10 text-white placeholder-zinc-500 focus:outline-none focus:border-red-500"
               />
               <textarea
-                placeholder="Tell us about your design — what inspired it, what car it's for, anything you want us to know..."
+                placeholder="Tell us about your submission — a decal design, photos of your car, what inspired it, what car it's for, anything you want us to know..."
                 value={decalNote}
                 onChange={(e) => setDecalNote(e.target.value)}
                 rows={4}
@@ -511,10 +512,10 @@ export default function Home() {
                 disabled={decalLoading}
                 className="bg-red-600 hover:bg-red-500 active:bg-red-700 disabled:bg-red-900 text-white font-black px-8 py-4 rounded-full uppercase tracking-widest text-sm transition-colors touch-manipulation"
               >
-                {decalLoading ? "Submitting..." : "🏁 Submit My Decal"}
+                {decalLoading ? "Submitting..." : "🏁 Submit My Decal / Car"}
               </button>
               <p className="text-zinc-600 text-xs text-center">
-                We'll review every submission. Not all decals may make it in, but every one gets seen.
+                We'll review every submission. Not all designs may make it in, but every one gets seen.
               </p>
             </form>
           )}
