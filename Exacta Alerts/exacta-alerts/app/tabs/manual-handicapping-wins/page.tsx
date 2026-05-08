@@ -148,7 +148,7 @@ export default async function ManualHandicappingWinsPage() {
 
             {rows.length === 0 && (
               <div className="bg-[#13152a] border border-slate-800 rounded-lg p-10 text-center text-slate-500">
-                No data available for the last 48 hours.
+                No data available for the last 96 hours.
               </div>
             )}
           </>

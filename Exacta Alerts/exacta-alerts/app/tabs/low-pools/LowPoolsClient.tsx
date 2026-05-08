@@ -28,11 +28,13 @@ function PoolTable({
   emptyMsg,
   onReview,
   loadingKey,
+  acknowledgedKeys,
 }: {
   rows: PoolRow[]
   emptyMsg: string
   onReview?: (row: PoolRow) => void
   loadingKey?: string | null
+  acknowledgedKeys?: Set<string>
 }) {
   if (rows.length === 0)
     return <p className="text-slate-500 text-sm px-4 py-6">{emptyMsg}</p>
@@ -65,8 +67,13 @@ function PoolTable({
                 <td className="px-4 py-2.5">
                   <SeverityBadge pct={row.poolpercentage} />
                 </td>
-                {onReview && (
-                  <td className="px-4 py-2.5 text-right">
+              {onReview && (
+                <td className="px-4 py-2.5 text-right">
+                  {acknowledgedKeys?.has(rowKey(row)) ? (
+                    <span className="text-xs px-3 py-1 rounded border border-emerald-800 text-emerald-600">
+                      ✅ Acknowledged
+                    </span>
+                  ) : (
                     <button
                       onClick={() => onReview(row)}
                       disabled={isLoading}
@@ -74,8 +81,9 @@ function PoolTable({
                     >
                       {isLoading ? 'Saving...' : 'Acknowledge →'}
                     </button>
-                  </td>
-                )}
+                  )}
+                </td>
+              )}
               </tr>
             )
           })}
@@ -340,6 +348,7 @@ useEffect(() => {
               emptyMsg="No new critical pools today."
               onReview={handleReview}
               loadingKey={loadingKey}
+              acknowledgedKeys={acknowledgedKeys}
             />
           </div>
         )}
