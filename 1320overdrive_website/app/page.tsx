@@ -6,6 +6,11 @@ import emailjs from "@emailjs/browser";
 import Link from "next/link";
 
 const screenshots = [
+  { src: "/images/screenshot1.png", alt: "Screenshot 1" },
+  { src: "/images/screenshot2.png", alt: "Screenshot 2" },
+  { src: "/images/screenshot3.png", alt: "Screenshot 3" },
+  { src: "/images/screenshot4.png", alt: "Screenshot 4" },
+  { src: "/images/screenshot5.png", alt: "Screenshot 5" },
   { src: "/images/garage.png", alt: "Garage" },
   { src: "/images/snowy-challenger.png", alt: "Snowy Challenger" },
   { src: "/images/car-purchase.png", alt: "Car Purchase" },
@@ -225,7 +230,6 @@ export default function Home() {
           {/* Diagonal racing stripe accents */}
           <div className="absolute left-0 top-0 h-full w-20 bg-black/20 skew-x-12 -translate-x-6 pointer-events-none" />
           <div className="absolute right-0 top-0 h-full w-20 bg-black/20 -skew-x-12 translate-x-6 pointer-events-none" />
-          <span className="hidden sm:inline text-base">🏁</span>
           <p className="font-black uppercase tracking-widest text-[10px] sm:text-xs leading-tight">
             Got a decal or car photo you want in the game?
           </p>
@@ -235,7 +239,6 @@ export default function Home() {
           >
             Submit Yours →
           </a>
-          <span className="hidden sm:inline text-base">🏁</span>
         </div>
       </div>
 
@@ -305,6 +308,7 @@ export default function Home() {
           <div className="hidden md:flex gap-6 lg:gap-8 text-sm text-zinc-400 flex-shrink-0">
             <a href="#about"      className="hover:text-white transition-colors">About</a>
             <a href="#features"   className="hover:text-white transition-colors">Features</a>
+            <a href="#multiplayer" className="hover:text-white transition-colors">Multiplayer</a>
             <a href="#decals"     className="hover:text-white transition-colors">Decals</a>
             <a href="#platforms"  className="hover:text-white transition-colors">Platforms</a>
             <a href="#media"      className="hover:text-white transition-colors">Media</a>
@@ -382,7 +386,8 @@ export default function Home() {
           playsInline
           className="absolute inset-0 w-full h-full object-cover object-center z-0"
         >
-          <source src="/videos/gameplay1.mp4" type="video/mp4" />
+          {/* <source src="/videos/gameplay1.mp4" type="video/mp4" /> */}
+          <source src="/videos/hero1.mp4" type="video/mp4" />
         </video>
         <div className="absolute inset-0 bg-black/65 z-10" />
         <div className="relative z-20 flex flex-col items-center gap-6 px-4">
@@ -390,7 +395,7 @@ export default function Home() {
             Coming Soon
           </p>
           <p className="text-zinc-300 text-base sm:text-xl max-w-xl leading-relaxed">
-            The ultimate mobile drag racing experience. Full throttle. No limits.
+            The ultimate mobile drag racing experience. Full throttle. No limits. Online competition.
           </p>
           <button
             onClick={() => setVideoModalOpen(true)}
@@ -425,7 +430,7 @@ export default function Home() {
             {[
               { title: "Custom Builds", desc: "Tune and upgrade your car to perfection." },
               { title: "Precision & Power", desc: "Easy to pick up, hard to master drag racing excitement." },
-              { title: "Compete", desc: "Race against opponents and climb the leaderboard." },
+              { title: "Compete Online", desc: "Race against live opponents and climb the leaderboard." },
             ].map((f) => (
               <div key={f.title} className="bg-zinc-900 rounded-2xl p-8 border border-white/5">
                 <h3 className="text-red-500 font-bold text-xl uppercase mb-3">{f.title}</h3>
@@ -435,6 +440,69 @@ export default function Home() {
           </div>
         </div>
       </section>
+
+            {/* ─── Multiplayer ─────────────────────────────────────────────────────── */}
+    <section id="multiplayer" className="py-20 md:py-32 px-6 bg-zinc-950 relative overflow-hidden">
+      {/* Red glow accent */}
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[350px] bg-red-600/10 rounded-full blur-3xl pointer-events-none" />
+
+      <div className="max-w-5xl mx-auto text-center relative z-10">
+        <h2 className="text-4xl md:text-5xl font-black uppercase mb-4 leading-tight">
+          Online & Local<br />
+          <span className="text-red-500">Multiplayer</span>
+        </h2>
+        <p className="text-zinc-400 text-base md:text-lg mb-14 max-w-2xl mx-auto leading-relaxed">
+          Race solo, race a friend on the couch, or race the world online.
+          However you play, the competition is real.
+        </p>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
+          {/* Online Multiplayer */}
+          <div className="bg-zinc-900 rounded-2xl p-8 border border-white/5 flex flex-col items-center gap-4">
+            <div className="w-14 h-14 rounded-full bg-red-600/20 border border-red-500/40 flex items-center justify-center">
+              <svg className="w-7 h-7 text-red-400" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                <path strokeLinecap="round" strokeLinejoin="round" d="M3.6 9h16.8M3.6 15h16.8M11.5 3a17 17 0 000 18M12.5 3a17 17 0 010 18" />
+              </svg>
+            </div>
+            <h3 className="text-white font-black text-xl uppercase">Online Multiplayer</h3>
+            <p className="text-zinc-400 text-sm leading-relaxed">
+              Go head-to-head against real racers around the world in live 1v1 races.
+              Climb the leaderboard and prove you belong at the top.
+            </p>
+          </div>
+
+          {/* Local Multiplayer */}
+          <div className="bg-zinc-900 rounded-2xl p-8 border border-white/5 flex flex-col items-center gap-4">
+            <div className="w-14 h-14 rounded-full bg-red-600/20 border border-red-500/40 flex items-center justify-center">
+              <svg className="w-7 h-7 text-red-400" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+                <rect x="3" y="4" width="8" height="16" rx="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                <rect x="13" y="4" width="8" height="16" rx="1.5" strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
+            </div>
+            <h3 className="text-white font-black text-xl uppercase">Local Multiplayer</h3>
+            <p className="text-zinc-400 text-sm leading-relaxed">
+              Same device, same room. Split-screen head-to-head races with a friend —
+              winner takes bragging rights.
+            </p>
+          </div>
+
+          {/* Cross-Play */}
+          <div className="bg-zinc-900 rounded-2xl p-8 border border-white/5 flex flex-col items-center gap-4">
+            <div className="w-14 h-14 rounded-full bg-red-600/20 border border-red-500/40 flex items-center justify-center">
+              <svg className="w-7 h-7 text-red-400" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
+              </svg>
+            </div>
+            <h3 className="text-white font-black text-xl uppercase">Cross-Play</h3>
+            <p className="text-zinc-400 text-sm leading-relaxed">
+              iOS, Android, and PC racers share the same track. No walled-off lobbies —
+              everyone races together, on any device.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
 
       {/* ─── Decal Submission ────────────────────────────────────────────────── */}
       <section id="decals" className="py-20 md:py-32 px-6 bg-black relative overflow-hidden">
@@ -450,11 +518,6 @@ export default function Home() {
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[300px] bg-red-600/10 rounded-full blur-3xl pointer-events-none" />
 
         <div className="max-w-xl mx-auto text-center relative z-10">
-          {/* Badge */}
-          <div className="inline-flex items-center gap-2 bg-red-600 text-white text-xs font-black uppercase tracking-widest px-4 py-2 rounded-full mb-6">
-            🔥 Exclusive Opportunity
-          </div>
-
           <h2 className="text-4xl md:text-5xl font-black uppercase mb-4 leading-tight">
             Your Decal.<br />
             <span className="text-red-500">Your Car. Our Track.</span>
@@ -512,7 +575,7 @@ export default function Home() {
                 disabled={decalLoading}
                 className="bg-red-600 hover:bg-red-500 active:bg-red-700 disabled:bg-red-900 text-white font-black px-8 py-4 rounded-full uppercase tracking-widest text-sm transition-colors touch-manipulation"
               >
-                {decalLoading ? "Submitting..." : "🏁 Submit My Decal / Car"}
+                {decalLoading ? "Submitting..." : "Submit My Decal / Car"}
               </button>
               <p className="text-zinc-600 text-xs text-center">
                 We'll review every submission. Not all designs may make it in, but every one gets seen.
@@ -524,8 +587,8 @@ export default function Home() {
 
       {/* ─── Platforms ───────────────────────────────────────────────────────── */}
       <section id="platforms" className="py-20 md:py-32 px-6 max-w-4xl mx-auto text-center">
-        <h2 className="text-3xl md:text-4xl font-black uppercase mb-4">Coming Soon</h2>
-        <p className="text-zinc-400 mb-12 text-base md:text-lg">Coming to multiple platforms</p>
+        <h2 className="text-3xl md:text-4xl font-black uppercase mb-4">Available On</h2>
+        <p className="text-zinc-400 mb-12 text-base md:text-lg"></p>
         <div className="flex flex-col sm:flex-row items-center justify-center gap-8 md:gap-16">
           {downloadPlatforms.map((p) => (
             <a
@@ -552,7 +615,33 @@ export default function Home() {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
           <div className="md:col-span-2 rounded-2xl overflow-hidden border border-white/10">
             <video controls className="w-full object-cover" playsInline>
+              <source src="/videos/gameplay1.mp4" type="video/mp4" />
+            </video>
+          </div>
+
+          <div className="md:col-span-2 rounded-2xl overflow-hidden border border-white/10">
+            <video controls className="w-full object-cover" playsInline>
               <source src="/videos/gameplay2.mp4" type="video/mp4" />
+            </video>
+          </div>
+          <div className="rounded-2xl overflow-hidden border border-white/10">
+            <video controls className="w-full object-cover" playsInline>
+              <source src="/videos/agera.mp4" type="video/mp4" />
+            </video>
+          </div>
+          <div className="rounded-2xl overflow-hidden border border-white/10">
+            <video controls className="w-full object-cover" playsInline>
+              <source src="/videos/overdrive.mp4" type="video/mp4" />
+            </video>
+          </div>
+          <div className="rounded-2xl overflow-hidden border border-white/10">
+            <video controls className="w-full object-cover" playsInline>
+              <source src="/videos/spinscreen.mp4" type="video/mp4" />
+            </video>
+          </div>
+          <div className="rounded-2xl overflow-hidden border border-white/10">
+            <video controls className="w-full object-cover" playsInline>
+              <source src="/videos/Splitscreen1.mp4" type="video/mp4" />
             </video>
           </div>
           {screenshots.map((s) => (
